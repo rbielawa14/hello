@@ -7,12 +7,12 @@
 public class CalcEngine
 {
     // Put instance variables here.
-    private int displayValue;
-    private int previousValue;
-    private String currentOperator;
+    private int displayValue; //The current value being shown in the display.
+    private int previousValue; //The last value entered.
+    private String currentOperator; //The last operator entered.
 
     /**
-     * Create a CalcEngine.
+     * Creates a new CalcEngine.
      */
     public CalcEngine()
     {
@@ -38,34 +38,16 @@ public class CalcEngine
      */
     public void numberPressed(int number)
     {
-        if (currentOperator.isEmpty()) {
-            displayValue = displayValue * 10 + number;
-        } 
-        else {
-            previousValue = displayValue;
-            displayValue = number;
-            currentOperator = ""; 
-        }
+        //Builds numbers from digits pressed on the calculator display.
+        displayValue = displayValue * 10 + number; 
     }
     
-    private void applyOperator()
-    {
-        if (currentOperator.equals("+")) {
-            displayValue = previousValue + displayValue;
-        }
-        else if (currentOperator.equals("-")) {
-            displayValue = previousValue - displayValue;
-        }
-    }
     /**
      * The 'plus' button was pressed. 
      */
     public void plus()
     {
-        applyOperator();
-        currentOperator = "+";
-        previousValue = displayValue;
-        displayValue = 0;
+        applyOperator("+");
     }
 
     /**
@@ -73,10 +55,7 @@ public class CalcEngine
      */
     public void minus()
     {
-        applyOperator();
-        currentOperator = "-";
-        previousValue = displayValue;
-        displayValue = 0;
+        applyOperator("-");
     }
 
     /**
@@ -84,8 +63,40 @@ public class CalcEngine
      */
     public void equals()
     {
-        applyOperator();
-        currentOperator = "";
+        calculateResult(); 
+        currentOperator = ""; //Resets the operator after calculation. 
+    }
+    
+    /**
+     * Calculates the results of different operations, called upon when "="
+     * is pressed, in equals().
+     */
+    private void calculateResult() {
+        //Determines, and then performs, the proper calculations.
+        if (currentOperator.equals("+")) {
+            //Addition, in response to the "+" being pressed.
+            displayValue = previousValue + displayValue;
+        }
+        else if (currentOperator.equals("-")) {
+            //Subtraction, in response to the "-" being pressed.
+            displayValue = previousValue - displayValue;
+        }
+        previousValue = 0; //Resets the previousValue after calculation.
+    }
+    
+    /**
+     * Handles operators when pressed. 
+     */
+    private void applyOperator(String operator)
+    {
+        //Checks if an operator has already been stored.
+        if (!currentOperator.isEmpty()) {
+            calculateResult();
+        }
+        //Stores values and operator in the correct variables/state. 
+        previousValue = displayValue; 
+        displayValue = 0;
+        currentOperator = operator;
     }
 
     /**
@@ -93,6 +104,7 @@ public class CalcEngine
      */
     public void clear()
     {
+        //Resets all variables.
         displayValue = 0;
         previousValue = 0;
         currentOperator = "";
@@ -107,8 +119,7 @@ public class CalcEngine
     }
 
     /**
-     * @return The author of this engine. This string is displayed as it is,
-     * so it should say something like "Written by H. Simpson".
+     * @return The author of this engine..
      */
     public String getAuthor()
     {
@@ -116,8 +127,7 @@ public class CalcEngine
     }
 
     /**
-     * @return The version number of this engine. This string is displayed as 
-     * it is, so it should say something like "Version 1.1".
+     * @return The version number of this engine. .
      */
     public String getVersion()
     {
